@@ -3,7 +3,7 @@ name: Build asp.net core application
 on:
   pull_request:
     branches:
-    - main
+    - master
 
 jobs:
   build:

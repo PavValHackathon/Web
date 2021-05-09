@@ -27,16 +27,12 @@ namespace PavValHackathon.Web.Common
         public string? TraceId { get; }
 
         public static Result Ok() => new();
-        public static Task<Result> OkAsync() => Task.FromResult(Ok());
 
         public static Result Failed(int errorCode, string errorMessage) => new(errorCode, errorMessage);
-        public static Task<Result> FailedAsync(int errorCode, string errorMessage) => Task.FromResult(Failed(errorCode, errorMessage));
         
         public static Result<TValue> Ok<TValue>(TValue value) => new(value);
-        public static Task<Result<TValue>> OkAsync<TValue>(TValue value) => Task.FromResult(Ok(value));
         
         public static Result<TValue> Failed<TValue>(int errorCode, string errorMessage) => new(errorCode, errorMessage);
-        public static Task<Result<TValue>> FailedAsync<TValue>(int errorCode, string errorMessage) => Task.FromResult(Failed<TValue>(errorCode, errorMessage));
     }
 
     public record Result<TValue> : Result

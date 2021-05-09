@@ -1,7 +1,7 @@
 ﻿using System;
 using Autofac;
 
-namespace PavValHackathon.Web.Common.Mappers.Impl
+namespace PavValHackathon.Web.Common.Mapping.Impl
 {
     public class Mapper : IMapper
     {

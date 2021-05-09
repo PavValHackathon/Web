@@ -34,4 +34,10 @@
       <Folder Include="v1\Commands\Handlers" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Content Update="appsettings.Development.json">
+        <DependentUpon>appsettings.json</DependentUpon>
+      </Content>
+    </ItemGroup>
+
 </Project>

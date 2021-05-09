@@ -27,7 +27,7 @@ namespace PavValHackathon.Web.Common.Cqrs.Commands.Decorators
             catch (Exception e)
             {
                 var commandName = typeof(TCommand).Name;
-                var result = await Result.FailedAsync((int) HttpStatusCode.InternalServerError, "Umm...");
+                var result = Result.Failed((int) HttpStatusCode.InternalServerError, "Umm...");
                 
                 _logger.LogError(e, "Action='{CommandName}' TrackId='{TrackId}' Message='Command  handler throw an exception.'", commandName, result.TraceId);
                 

@@ -1,4 +1,4 @@
-﻿namespace PavValHackathon.Web.Common.Mappers
+﻿namespace PavValHackathon.Web.Common.Mapping
 {
     public interface IMapper
     {

@@ -27,7 +27,7 @@ namespace PavValHackathon.Web.Common.Cqrs.Queries.Decorators
             catch (Exception e)
             {
                 var queryName = typeof(TQuery).Name;
-                var result = await Result.FailedAsync<TResult>((int) HttpStatusCode.InternalServerError, "Umm...");
+                var result = Result.Failed<TResult>((int) HttpStatusCode.InternalServerError, "Umm...");
                 
                 _logger.LogError(e, "Action='{QueryName}' TrackId='{TrackId}' Message='Query handler throw an exception.'", queryName, result.TraceId);
                 

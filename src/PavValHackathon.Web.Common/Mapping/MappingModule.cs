@@ -1,7 +1,7 @@
 ﻿using Autofac;
-using PavValHackathon.Web.Common.Mappers.Impl;
+using PavValHackathon.Web.Common.Mapping.Impl;
 
-namespace PavValHackathon.Web.Common.Mappers
+namespace PavValHackathon.Web.Common.Mapping
 {
     public abstract class MappingModule : Module
     {

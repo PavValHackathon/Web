@@ -1,5 +1,5 @@
 ﻿using Autofac;
-using PavValHackathon.Web.Common.Mappers;
+using PavValHackathon.Web.Common.Mapping;
 
 namespace PavValHackathon.Web.API.Modules
 {

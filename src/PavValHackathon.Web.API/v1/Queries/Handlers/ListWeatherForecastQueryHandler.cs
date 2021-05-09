@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using PavValHackathon.Web.API.v1.Contracts;
 using PavValHackathon.Web.Common;
 using PavValHackathon.Web.Common.Cqrs.Queries;
+using PavValHackathon.Web.Common.Extensions;
 
 namespace PavValHackathon.Web.API.v1.Queries.Handlers
 {
@@ -27,7 +28,7 @@ namespace PavValHackathon.Web.API.v1.Queries.Handlers
                 })
                 .ToList();
 
-            return Result.OkAsync(res);
+            return Result.Ok(res).AsAsync();
         }
     }
 }

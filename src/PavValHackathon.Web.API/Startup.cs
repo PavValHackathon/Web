@@ -23,6 +23,7 @@ namespace PavValHackathon.Web.API
         {
             builder.RegisterModule<CoreMappingModule>();
             builder.RegisterModule<CoreCqrsModule>();
+            builder.RegisterModule<CoreDbModule>();
         }
 
         public override void ConfigureServices(IServiceCollection services)

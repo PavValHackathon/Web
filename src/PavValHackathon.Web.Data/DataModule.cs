@@ -1,4 +1,6 @@
 ﻿using Autofac;
+using Microsoft.EntityFrameworkCore;
+using PavValHackathon.Web.Data.Contexts;
 
 namespace PavValHackathon.Web.Data
 {
@@ -6,7 +8,9 @@ namespace PavValHackathon.Web.Data
     {
         protected sealed override void Load(ContainerBuilder builder)
         {
-            base.Load(builder);
+            builder.RegisterType<DataContext>().As<DbContext>().InstancePerLifetimeScope();
+            
+            Register(builder);
         }
 
         protected abstract void Register(ContainerBuilder builder);

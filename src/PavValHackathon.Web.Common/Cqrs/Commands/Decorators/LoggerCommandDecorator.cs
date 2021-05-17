@@ -6,19 +6,19 @@ using Microsoft.Extensions.Logging;
 
 namespace PavValHackathon.Web.Common.Cqrs.Commands.Decorators
 {
-    public class LoggerCommandDecorator<TCommand> : CommandHandlerDecorator<TCommand>
-        where TCommand : class, ICommand
+    public class LoggerCommandDecorator<TCommand, TResult> : CommandHandlerDecorator<TCommand, TResult>
+        where TCommand : class, ICommand<TResult>
     {
-        private readonly ILogger<LoggerCommandDecorator<TCommand>> _logger;
+        private readonly ILogger<LoggerCommandDecorator<TCommand, TResult>> _logger;
 
         public LoggerCommandDecorator(
-            ICommandHandler<TCommand> innerHandler,
-            ILogger<LoggerCommandDecorator<TCommand>> logger) : base(innerHandler)
+            ICommandHandler<TCommand, TResult> innerHandler,
+            ILogger<LoggerCommandDecorator<TCommand, TResult>> logger) : base(innerHandler)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public override async Task<Result> HandleAsync(TCommand command, CancellationToken cancellationToken)
+        public override async Task<Result<TResult>> HandleAsync(TCommand command, CancellationToken cancellationToken)
         {
             if (!_logger.IsEnabled(LogLevel.Information))
                 return await InnerHandler.HandleAsync(command, cancellationToken);

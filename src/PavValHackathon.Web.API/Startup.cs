@@ -7,6 +7,8 @@ using GodelTech.Microservices.Swagger;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using PavValHackathon.Web.API.Infrastructure;
+using PavValHackathon.Web.API.Infrastructure.Impl;
 using PavValHackathon.Web.API.Initializers;
 using PavValHackathon.Web.API.Modules;
 
@@ -24,6 +26,10 @@ namespace PavValHackathon.Web.API
             builder.RegisterModule<CoreMappingModule>();
             builder.RegisterModule<CoreCqrsModule>();
             builder.RegisterModule<CoreDbModule>();
+
+            builder.RegisterType<UserContext>()
+                .As<IUserContext>()
+                .InstancePerLifetimeScope();
         }
 
         public override void ConfigureServices(IServiceCollection services)
@@ -35,7 +41,7 @@ namespace PavValHackathon.Web.API
         protected override IEnumerable<IMicroserviceInitializer> CreateInitializers()
         {
             yield return new DeveloperExceptionPageInitializer(Configuration);
-            yield return new HttpsInitializer(Configuration);
+            //yield return new HttpsInitializer(Configuration);
 
             yield return new GenericInitializer((app, env) => app.UseRouting());
             

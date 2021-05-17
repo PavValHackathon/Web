@@ -12,10 +12,10 @@ namespace PavValHackathon.Web.Common.Cqrs.Commands.Impl
             _lifetimeScope = lifetimeScope ?? throw new ArgumentNullException(nameof(lifetimeScope));
         }
 
-        public ICommandHandler<TCommand> Resolve<TCommand>() 
-            where TCommand : class, ICommand
+        public ICommandHandler<TCommand, TResult> Resolve<TCommand, TResult>() 
+            where TCommand : class, ICommand<TResult>
         {
-            return _lifetimeScope.Resolve<ICommandHandler<TCommand>>();
+            return _lifetimeScope.Resolve<ICommandHandler<TCommand, TResult>>();
         }
     }
 }

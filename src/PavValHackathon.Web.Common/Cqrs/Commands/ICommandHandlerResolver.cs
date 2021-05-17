@@ -2,7 +2,7 @@
 {
     public interface ICommandHandlerResolver
     {
-        ICommandHandler<TCommand> Resolve<TCommand>()
-            where TCommand : class, ICommand;
+        ICommandHandler<TCommand, TResult> Resolve<TCommand, TResult>()
+            where TCommand : class, ICommand<TResult>;
     }
 }

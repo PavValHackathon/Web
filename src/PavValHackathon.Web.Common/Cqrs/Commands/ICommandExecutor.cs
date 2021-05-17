@@ -5,7 +5,7 @@ namespace PavValHackathon.Web.Common.Cqrs.Commands
 {
     public interface ICommandExecutor
     {
-        Task<Result> ExecuteAsync<TCommand>(TCommand command, CancellationToken cancellationToken = default)
-            where TCommand : class, ICommand;
+        Task<Result<TResult>> ExecuteAsync<TCommand, TResult>(TCommand command, CancellationToken cancellationToken = default)
+            where TCommand : class, ICommand<TResult>;
     }
 }

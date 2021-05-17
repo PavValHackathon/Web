@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace PavValHackathon.Web.Common
 {
-    public record Result
+    public class Result
     {
         protected Result()
         {
@@ -35,18 +35,32 @@ namespace PavValHackathon.Web.Common
         public static Result<TValue> Failed<TValue>(int errorCode, string errorMessage) => new(errorCode, errorMessage);
     }
 
-    public record Result<TValue> : Result
+    public abstract class ValueResult : Result
+    {
+        protected ValueResult()
+        {
+        }
+
+        protected ValueResult(int errorCode, string errorMessage) 
+            : base(errorCode, errorMessage)
+        {
+        }
+
+        public object? Value { get; set; }
+    }
+
+    public class Result<TValue> : ValueResult
     {
         protected internal Result(TValue value)
         {
-            Value = value;
+            base.Value = value;
         }
 
         protected internal Result(int errorCode, string errorMessage)
             : base(errorCode, errorMessage)
         {
         }
-        
-        public TValue? Value { get; }
+
+        public new TValue? Value => (TValue?) base.Value;
     }
 }

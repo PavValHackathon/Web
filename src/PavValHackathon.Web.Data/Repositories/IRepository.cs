@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 namespace PavValHackathon.Web.Data.Repositories
 {
     public interface IRepository<TEntity> : IReadOnlyRepository<TEntity> 
-        where TEntity : class, IEntity
+        where TEntity : class, IDomainEntity
     {
         Task<TEntity> CreateAsync(TEntity entity, CancellationToken cancellationToken = default);
 

@@ -42,15 +42,22 @@ namespace PavValHackathon.Web.Common.Cqrs
             return new QueryRegistrationBuilder<TQuery, TResult>(builder);
         }
 
-        protected static ICommandRegistrationBuilder<TCommand> RegisterCommandHandler<TCommand, TCommandHandler>(ContainerBuilder builder)
-            where TCommand : class, ICommand
-            where TCommandHandler : class, ICommandHandler<TCommand>
+        protected static ICommandRegistrationBuilder<TCommand, Void> RegisterCommandHandler<TCommand, TCommandHandler>(ContainerBuilder builder)
+            where TCommand : class, ICommand<Void>
+            where TCommandHandler : class, ICommandHandler<TCommand, Void>
+        {
+            return RegisterCommandHandler<TCommand, Void, TCommandHandler>(builder);
+        }
+        
+        protected static ICommandRegistrationBuilder<TCommand, TResult> RegisterCommandHandler<TCommand, TResult, TCommandHandler>(ContainerBuilder builder)
+            where TCommand : class, ICommand<TResult>
+            where TCommandHandler : class, ICommandHandler<TCommand, TResult>
         {
             builder.RegisterType<TCommandHandler>()
-                .As<ICommandHandler<TCommand>>()
+                .As<ICommandHandler<TCommand, TResult>>()
                 .InstancePerLifetimeScope();
 
-            return new CommandRegistrationBuilder<TCommand>(builder);
+            return new CommandRegistrationBuilder<TCommand, TResult>(builder);
         }
     }
 }

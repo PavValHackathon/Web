@@ -6,19 +6,19 @@ using Microsoft.Extensions.Logging;
 
 namespace PavValHackathon.Web.Common.Cqrs.Commands.Decorators
 {
-    public class ExceptionCatcherCommandDecorator<TCommand> : CommandHandlerDecorator<TCommand>
-        where TCommand : class, ICommand
+    public class ExceptionCatcherCommandDecorator<TCommand, TResult> : CommandHandlerDecorator<TCommand, TResult>
+        where TCommand : class, ICommand<TResult>
     {
-        private readonly ILogger<ExceptionCatcherCommandDecorator<TCommand>> _logger;
+        private readonly ILogger<ExceptionCatcherCommandDecorator<TCommand, TResult>> _logger;
         
         public ExceptionCatcherCommandDecorator(
-            ILogger<ExceptionCatcherCommandDecorator<TCommand>> logger,
-            ICommandHandler<TCommand> innerHandler) : base(innerHandler)
+            ILogger<ExceptionCatcherCommandDecorator<TCommand, TResult>> logger,
+            ICommandHandler<TCommand, TResult> innerHandler) : base(innerHandler)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public override async Task<Result> HandleAsync(TCommand command, CancellationToken cancellationToken)
+        public override async Task<Result<TResult>> HandleAsync(TCommand command, CancellationToken cancellationToken)
         {
             try
             {
@@ -27,7 +27,7 @@ namespace PavValHackathon.Web.Common.Cqrs.Commands.Decorators
             catch (Exception e)
             {
                 var commandName = typeof(TCommand).Name;
-                var result = Result.Failed((int) HttpStatusCode.InternalServerError, "Umm...");
+                var result = Result.Failed<TResult>((int) HttpStatusCode.InternalServerError, "Umm...");
                 
                 _logger.LogError(e, "Action='{CommandName}' TrackId='{TrackId}' Message='Command  handler throw an exception.'", commandName, result.TraceId);
                 

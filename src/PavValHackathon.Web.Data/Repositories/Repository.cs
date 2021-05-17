@@ -7,16 +7,16 @@ using PavValHackathon.Web.Common;
 
 namespace PavValHackathon.Web.Data.Repositories
 {
-    public abstract class Repository<TEntity> : ReadOnlyRepository<TEntity>, IRepository<TEntity>
-        where TEntity : class, IEntity
+    public class Repository<TEntity> : ReadOnlyRepository<TEntity>, IRepository<TEntity>
+        where TEntity : class, IDomainEntity
     {
         private readonly DbContext _dbContext;
         private readonly DbSet<TEntity> _dbSet;
         
-        public Repository(DbContext dbContext, DbSet<TEntity> dbSet) : base(dbSet)
+        public Repository(DbContext dbContext) : base(dbContext)
         {
             _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
-            _dbSet = dbSet ?? throw new ArgumentNullException(nameof(dbSet));
+            _dbSet = dbContext.Set<TEntity>();
         }
 
         public virtual async Task<TEntity> CreateAsync(TEntity entity, CancellationToken cancellationToken = default)

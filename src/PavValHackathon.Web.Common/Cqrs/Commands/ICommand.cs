@@ -1,6 +1,6 @@
 ﻿namespace PavValHackathon.Web.Common.Cqrs.Commands
 {
-    public interface ICommand
+    public interface ICommand<TResult>
     {   
     }
 }

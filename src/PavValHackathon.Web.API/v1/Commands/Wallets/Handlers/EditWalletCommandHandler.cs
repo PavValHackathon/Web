@@ -3,6 +3,7 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using PavValHackathon.Web.API.Infrastructure;
+using PavValHackathon.Web.API.Infrastructure.Extensions;
 using PavValHackathon.Web.Common;
 using PavValHackathon.Web.Common.Cqrs.Commands;
 using PavValHackathon.Web.Data.Domain;
@@ -37,24 +38,25 @@ namespace PavValHackathon.Web.API.v1.Commands.Wallets.Handlers
             var wallet = await _walletRepository.GetAsync(command.Id, userId, cancellationToken);
 
             if (wallet is null)
-                return Result.Failed<Void>((int) HttpStatusCode.NotFound, "Wallet not found.");
+                return this.NotFound("Wallet not found.");
 
             if (!string.IsNullOrWhiteSpace(command.Title))
                 wallet.Title = command.Title;
 
-            if (command.CurrencyId.HasValue)
+            if (command.CurrencyId.HasValue &&
+                command.CurrencyId != wallet.CurrencyId)
             {
                 var currencyFound = await _currencyRepository.Value.ExistAsync(command.CurrencyId.Value, cancellationToken);
 
                 if (!currencyFound)
-                    return Result.Failed<Void>((int) HttpStatusCode.NotFound, "Currency not found.");
+                    return this.NotFound("Currency not found.");
                 
                 wallet.CurrencyId = command.CurrencyId.Value;
             }
 
             await _walletRepository.UpdateAsync(wallet, cancellationToken);
 
-            return Result.Ok(Void.Instance);
+            return this.Ok();
         }
     }
 }

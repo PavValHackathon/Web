@@ -21,6 +21,11 @@ namespace PavValHackathon.Web.Data
             builder.RegisterGeneric(typeof(Repository<>))
                 .As(typeof(IRepository<>))
                 .InstancePerLifetimeScope();
+
+            builder.RegisterType<BucketRepository>()
+                .As<IReadOnlyRepository<Bucket>>()
+                .As<IRepository<Bucket>>()
+                .InstancePerLifetimeScope();
             
             builder.RegisterType<WalletRepository>()
                 .As<IReadOnlyRepository<Wallet>>()

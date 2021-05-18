@@ -1,9 +1,12 @@
-﻿using System.Collections.Generic;
-using Autofac;
+﻿using Autofac;
 using PavValHackathon.Web.API.Infrastructure;
+using PavValHackathon.Web.API.v1.Commands.Buckets;
+using PavValHackathon.Web.API.v1.Commands.Buckets.Handlers;
 using PavValHackathon.Web.API.v1.Commands.Wallets;
 using PavValHackathon.Web.API.v1.Commands.Wallets.Handlers;
 using PavValHackathon.Web.API.v1.Contracts;
+using PavValHackathon.Web.API.v1.Queries.Buckets;
+using PavValHackathon.Web.API.v1.Queries.Buckets.Handlers;
 using PavValHackathon.Web.API.v1.Queries.Wallets;
 using PavValHackathon.Web.API.v1.Queries.Wallets.Handlers;
 using PavValHackathon.Web.Common;
@@ -15,7 +18,34 @@ namespace PavValHackathon.Web.API.Modules
     public class CoreCqrsModule : CqrsModule
     {
         protected override void Register(ContainerBuilder builder)
-        {   
+        {
+            RegisterBucket(builder);
+            RegisterWallet(builder);
+        }
+
+        private static void RegisterBucket(ContainerBuilder builder)
+        {
+            RegisterQueryHandler<GetBucketQuery, BucketDocument, GetBucketQueryHandler>(builder)
+                .InstancePerLifetimeScope();
+            
+            RegisterQueryHandler<ListBucketQuery, PaginationCollection<BucketDocument>, ListBucketQueryHandler>(builder)
+                .InstancePerLifetimeScope();
+            
+            RegisterCommandHandler<CreateBucketCommand, int, CreateBucketCommandHandler>(builder)
+                .RegisterDecorator<TransactionCommandDecorator<CreateBucketCommand, int>>()
+                .InstancePerLifetimeScope();
+            
+            RegisterCommandHandler<DeleteBucketCommand, DeleteBucketCommandHandler>(builder)
+                .RegisterDecorator<TransactionCommandDecorator<DeleteBucketCommand, Void>>()
+                .InstancePerLifetimeScope();
+            
+            RegisterCommandHandler<EditBucketCommand, EditBucketCommandHandler>(builder)
+                .RegisterDecorator<TransactionCommandDecorator<EditBucketCommand, Void>>()
+                .InstancePerLifetimeScope();
+        }
+
+        private static void RegisterWallet(ContainerBuilder builder)
+        {
             RegisterCommandHandler<DeleteWalletCommand, DeleteWalletCommandHandler>(builder)
                 .RegisterDecorator<TransactionCommandDecorator<DeleteWalletCommand, Void>>()
                 .InstancePerLifetimeScope();

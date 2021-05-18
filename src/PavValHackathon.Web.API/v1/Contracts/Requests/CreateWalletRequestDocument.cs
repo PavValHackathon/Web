@@ -4,10 +4,10 @@ using Swashbuckle.AspNetCore.Annotations;
 namespace PavValHackathon.Web.API.v1.Contracts.Requests
 {
     [SwaggerDiscriminator("CreateWalletRequest")]
-    public class CreateWalletRequestContract
+    public class CreateWalletRequestDocument
     {
         [Required]
-        [StringLength(int.MaxValue, MinimumLength = 1)]
+        [MinLength(1)]
         public string Title { get; set; } = null!;
         
         [Required]

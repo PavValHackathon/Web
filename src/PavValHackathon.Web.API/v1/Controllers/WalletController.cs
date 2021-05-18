@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -66,9 +65,9 @@ namespace PavValHackathon.Web.API.v1.Controllers
         [HttpPost]
         [SwaggerResponse((int)HttpStatusCode.Created, type: typeof(WalletDocument))]
         [SwaggerResponse((int)HttpStatusCode.NotFound, type: typeof(ProblemDetails))]
-        public async Task<IActionResult> CreateAsync([FromBody] CreateWalletRequestContract contract)
+        public async Task<IActionResult> CreateAsync([FromBody] CreateWalletRequestDocument document)
         {
-            var command = _mapper.MapFrom<CreateWalletRequestContract, CreateWalletCommand>(contract);
+            var command = _mapper.MapFrom<CreateWalletRequestDocument, CreateWalletCommand>(document);
             var result = await _commandExecutor.ExecuteAsync<CreateWalletCommand, int>(command);
             
             if (result.IsFailed)
@@ -80,19 +79,20 @@ namespace PavValHackathon.Web.API.v1.Controllers
             if (queryResult.IsFailed)
                 return BadRequest(result);
 
-            return CreatedAtAction("GetAsync", new { id = queryResult.Value!.Id }, queryResult);
+            // ReSharper disable once Mvc.ActionNotResolved
+            return CreatedAtAction(nameof(GetAsync), new { id = queryResult.Value!.Id }, queryResult);
         }
 
-        [HttpPut("{id:int}")]
+        [HttpPatch("{id:int}")]
         [SwaggerResponse((int)HttpStatusCode.NoContent)]
         [SwaggerResponse((int)HttpStatusCode.NotFound, type: typeof(ProblemDetails))]
-        public async Task<IActionResult> EditAsync([FromRoute] int id, [FromBody] EditWalletRequestContract contract)
+        public async Task<IActionResult> EditAsync([FromRoute] int id, [FromBody] EditWalletRequestDocument document)
         {
             if (id <= 0)
                 return BadRequest(Result.Failed((int) HttpStatusCode.BadRequest, "Id can not be less that 1."));
 
             var command = new EditWalletCommand(id);
-            _mapper.MapFrom(command, contract);
+            _mapper.MapFrom(command, document);
             var commandResult = await _commandExecutor.ExecuteAsync<EditWalletCommand, Void>(command);
 
             if (commandResult.IsFailed)

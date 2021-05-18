@@ -1,6 +1,6 @@
 ﻿namespace PavValHackathon.Web.Data
 {
-    public interface IEntity
+    public interface IDomainEntity
     {
         int Id { get; set; } 
     }

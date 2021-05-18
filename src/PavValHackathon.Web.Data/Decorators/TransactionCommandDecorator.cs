@@ -9,36 +9,35 @@ using PavValHackathon.Web.Common.Cqrs.Commands;
 
 namespace PavValHackathon.Web.Data.Decorators
 {
-    public class TransactionCommandDecorator<TCommand> : CommandHandlerDecorator<TCommand> 
-        where TCommand : class, ICommand
+    public class TransactionCommandDecorator<TCommand, TResult> : CommandHandlerDecorator<TCommand, TResult> 
+        where TCommand : class, ICommand<TResult>
     {
-        private static readonly string ActionName = $"{nameof(TransactionCommandDecorator<TCommand>)}<{typeof(TCommand).Name}>";
+        private static readonly string ActionName = $"{nameof(TransactionCommandDecorator<TCommand, TResult>)}<{typeof(TCommand).Name}>";
         private static readonly string SavepointName = typeof(TCommand).Name;
 
-        private readonly ILogger<TransactionCommandDecorator<TCommand>> _logger;
+        private readonly ILogger<TransactionCommandDecorator<TCommand, TResult>> _logger;
         private readonly DbContext _dbContext;
 
         private bool _isNestedTransaction;
         
         public TransactionCommandDecorator(
             DbContext dbContext, 
-            ICommandHandler<TCommand> innerHandler,
-            ILogger<TransactionCommandDecorator<TCommand>> logger) 
+            ICommandHandler<TCommand, TResult> innerHandler,
+            ILogger<TransactionCommandDecorator<TCommand, TResult>> logger) 
             : base(innerHandler)
         {
             _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public override async Task<Result> HandleAsync(TCommand command, CancellationToken cancellationToken)
+        public override async Task<Result<TResult>> HandleAsync(TCommand command, CancellationToken cancellationToken)
         {
             Assert.IsNotNull(command, nameof(command));
             cancellationToken.ThrowIfCancellationRequested();
 
             var transaction = await CreateTransactionAsync(cancellationToken);
 
-            // ReSharper disable once MethodHasAsyncOverload
-            var result = Result.Failed(500, "Transaction decorator throw an exception.");
+            var result = Result.Failed<TResult>(500, "Transaction decorator throw an exception.");
 
             try
             {

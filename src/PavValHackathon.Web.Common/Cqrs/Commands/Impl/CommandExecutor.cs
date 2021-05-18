@@ -13,13 +13,13 @@ namespace PavValHackathon.Web.Common.Cqrs.Commands.Impl
             _commandHandlerResolver = commandHandlerResolver ?? throw new ArgumentNullException(nameof(commandHandlerResolver));
         }
 
-        public Task<Result> ExecuteAsync<TCommand>(TCommand command, CancellationToken cancellationToken = default) 
-            where TCommand : class, ICommand
+        public Task<Result<TResult>> ExecuteAsync<TCommand, TResult>(TCommand command, CancellationToken cancellationToken = default) 
+            where TCommand : class, ICommand<TResult>
         {
             Assert.IsNotNull(command, nameof(command));
             cancellationToken.ThrowIfCancellationRequested();
 
-            var handler = _commandHandlerResolver.Resolve<TCommand>();
+            var handler = _commandHandlerResolver.Resolve<TCommand, TResult>();
             return handler.HandleAsync(command, cancellationToken);
         }
     }

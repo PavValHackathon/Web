@@ -16,6 +16,7 @@ namespace PavValHackathon.Web.API.Initializers
             base.ConfigureMvcOptions(options);
 
             options.Filters.Add<ResultFilter>();
+            options.Filters.Add<PaginationCollectionFilter>();
         }
     }
 }

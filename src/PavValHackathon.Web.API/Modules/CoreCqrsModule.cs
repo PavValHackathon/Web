@@ -2,6 +2,9 @@
 using PavValHackathon.Web.API.Infrastructure;
 using PavValHackathon.Web.API.v1.Commands.Buckets;
 using PavValHackathon.Web.API.v1.Commands.Buckets.Handlers;
+using PavValHackathon.Web.API.v1.Commands.Transactions;
+using PavValHackathon.Web.API.v1.Commands.Transactions.Decorators;
+using PavValHackathon.Web.API.v1.Commands.Transactions.Handlers;
 using PavValHackathon.Web.API.v1.Commands.Wallets;
 using PavValHackathon.Web.API.v1.Commands.Wallets.Handlers;
 using PavValHackathon.Web.API.v1.Contracts;
@@ -19,6 +22,12 @@ namespace PavValHackathon.Web.API.Modules
     {
         protected override void Register(ContainerBuilder builder)
         {
+            RegisterCommandHandler<CreateTransactionCommand, int, CreateTransactionCommandHandler>(builder)
+                .RegisterDecorator<UpdateBucketTransactionCommandDecorator>()
+                .RegisterDecorator<UpdateWalletTransactionCommandDecorator>()
+                .RegisterDecorator<TransactionCommandDecorator<CreateTransactionCommand, int>>()
+                .InstancePerLifetimeScope();
+            
             RegisterBucket(builder);
             RegisterWallet(builder);
         }

@@ -15,6 +15,29 @@ namespace PavValHackathon.Web.Data.Contexts
             modelBuilder.Entity<Bucket>(BuildBucketType);
             modelBuilder.Entity<Wallet>(BuildWalletType);
             modelBuilder.Entity<Currency>(BuildCurrencyType);
+            modelBuilder.Entity<Transaction>(BuildTransactionType);
+        }
+
+        private static void BuildTransactionType(EntityTypeBuilder<Transaction> entityBuilder)
+        {
+            entityBuilder.HasKey(p => p.Id);
+
+            entityBuilder.HasOne(p => p.Bucket)
+                .WithMany()
+                .HasForeignKey(p => p.BucketId)
+                .IsRequired();
+            
+            entityBuilder.HasOne(p => p.Wallet)
+                .WithMany()
+                .HasForeignKey(p => p.WalletId)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.NoAction);
+            
+            entityBuilder.HasOne(p => p.Currency)
+                .WithMany()
+                .HasForeignKey(p => p.CurrencyId)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.NoAction);
         }
 
         private static void BuildBucketType(EntityTypeBuilder<Bucket> entityBuilder)

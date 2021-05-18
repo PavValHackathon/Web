@@ -29,6 +29,8 @@ namespace PavValHackathon.Web.API.v1.Commands.Wallets.Handlers
 
             var userId = _userContext.UserId;
             
+            //TODO: delete all transactions!!!
+            
             if (await _walletRepository.ExistAsync(command.Id, userId, cancellationToken) == false)
                 return this.NotFound("Wallet not found.");
 

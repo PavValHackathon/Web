@@ -1,25 +1,26 @@
-using PavValHackathon.Web.API.v1.Commands.Wallets;
+using PavValHackathon.Web.API.v1.Commands.Buckets;
 using PavValHackathon.Web.API.v1.Contracts.Requests;
 using PavValHackathon.Web.Common;
 using PavValHackathon.Web.Common.Mapping;
 
 namespace PavValHackathon.Web.API.v1.Mappers
 {
-    public class CreateWalletCommandMapper : IMapperDefinition<CreateWalletRequestDocument, CreateWalletCommand>
+    public class CreateBucketCommandMapper : IMapperDefinition<CreateBucketRequestDocument, CreateBucketCommand>
     {
-        public CreateWalletCommand Map(CreateWalletRequestDocument document)
+        public CreateBucketCommand Map(CreateBucketRequestDocument document)
         {
             Assert.IsNotNull(document, nameof(document));
 
-            return Map(new CreateWalletCommand(), document);
+            return Map(new CreateBucketCommand(), document);
         }
 
-        public CreateWalletCommand Map(CreateWalletCommand command, CreateWalletRequestDocument document)
+        public CreateBucketCommand Map(CreateBucketCommand command, CreateBucketRequestDocument document)
         {
             Assert.IsNotNull(command, nameof(command));
             Assert.IsNotNull(document, nameof(document));
 
             command.Title = document.Title;
+            command.PictureId = document.PictureId;
             command.CurrencyId = document.CurrencyId;
             
             return command;

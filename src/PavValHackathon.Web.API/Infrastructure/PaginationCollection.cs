@@ -14,6 +14,15 @@ namespace PavValHackathon.Web.API.Infrastructure
 
     public class PaginationCollection<T> : PaginationCollection
     {
+        public PaginationCollection()
+        {
+        }
+
+        public PaginationCollection(ICollection<T> collection)
+        {
+            Items = collection;
+        }
+        
         public ICollection<T> Items { get; set; } = Array.Empty<T>();
     }
 }

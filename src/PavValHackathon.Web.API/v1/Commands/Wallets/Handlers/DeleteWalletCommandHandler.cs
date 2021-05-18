@@ -3,6 +3,7 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using PavValHackathon.Web.API.Infrastructure;
+using PavValHackathon.Web.API.Infrastructure.Extensions;
 using PavValHackathon.Web.Common;
 using PavValHackathon.Web.Common.Cqrs.Commands;
 using PavValHackathon.Web.Data.Repositories.Custom;
@@ -29,11 +30,11 @@ namespace PavValHackathon.Web.API.v1.Commands.Wallets.Handlers
             var userId = _userContext.UserId;
             
             if (await _walletRepository.ExistAsync(command.Id, userId, cancellationToken) == false)
-                return Result.Failed<Void>((int) HttpStatusCode.NotFound, "Wallet not found.");
+                return this.NotFound("Wallet not found.");
 
             await _walletRepository.DeleteAsync(command.Id, cancellationToken);
             
-            return Result.Ok(Void.Instance);
+            return this.Ok();
         }
     }
 }

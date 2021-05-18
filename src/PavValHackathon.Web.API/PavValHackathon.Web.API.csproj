@@ -30,11 +30,13 @@
 
     <ItemGroup>
       <Folder Include="v1\Commands\Decorators" />
-      <Folder Include="v1\Queries\Buckets" />
     </ItemGroup>
 
     <ItemGroup>
       <Content Update="appsettings.Development.json">
+        <DependentUpon>appsettings.json</DependentUpon>
+      </Content>
+      <Content Update="appsettings.Production.json">
         <DependentUpon>appsettings.json</DependentUpon>
       </Content>
     </ItemGroup>

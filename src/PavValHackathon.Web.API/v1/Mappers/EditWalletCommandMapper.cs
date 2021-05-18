@@ -5,20 +5,20 @@ using PavValHackathon.Web.Common.Mapping;
 
 namespace PavValHackathon.Web.API.v1.Mappers
 {
-    public class EditWalletCommandMapper : IMapperDefinition<EditWalletRequestContract, EditWalletCommand>
+    public class EditWalletCommandMapper : IMapperDefinition<EditWalletRequestDocument, EditWalletCommand>
     {
-        public EditWalletCommand Map(EditWalletRequestContract @from)
+        public EditWalletCommand Map(EditWalletRequestDocument @from)
         {
             throw new System.NotImplementedException();
         }
 
-        public EditWalletCommand Map(EditWalletCommand command, EditWalletRequestContract contract)
+        public EditWalletCommand Map(EditWalletCommand command, EditWalletRequestDocument document)
         {
             Assert.IsNotNull(command, nameof(command));
-            Assert.IsNotNull(contract, nameof(contract));
+            Assert.IsNotNull(document, nameof(document));
 
-            command.Title = contract.Title;
-            command.CurrencyId = contract.CurrencyId;
+            command.Title = document.Title;
+            command.CurrencyId = document.CurrencyId;
             
             return command;
         }

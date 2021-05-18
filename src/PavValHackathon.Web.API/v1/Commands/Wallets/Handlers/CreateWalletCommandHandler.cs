@@ -3,6 +3,7 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using PavValHackathon.Web.API.Infrastructure;
+using PavValHackathon.Web.API.Infrastructure.Extensions;
 using PavValHackathon.Web.Common;
 using PavValHackathon.Web.Common.Cqrs.Commands;
 using PavValHackathon.Web.Common.Mapping;
@@ -37,13 +38,13 @@ namespace PavValHackathon.Web.API.v1.Commands.Wallets.Handlers
             cancellationToken.ThrowIfCancellationRequested();
 
             if (await _currencyRepository.ExistAsync(command.CurrencyId, cancellationToken) == false)
-                return Result.Failed<int>((int) HttpStatusCode.NotFound, "Currency not found.");
+                return this.NotFound("Currency not found.");
             
             var domainWallet = _walletMapper.Map(command);
             domainWallet.UserId = _userContext.UserId;
             domainWallet = await _repository.CreateAsync(domainWallet, cancellationToken);
 
-            return Result.Ok(domainWallet.Id);
+            return this.Ok(domainWallet.Id);
         }
     }
 }

@@ -22,7 +22,7 @@ namespace PavValHackathon.Web.API.v1.Mappers
             command.Value = document.Value;
             command.DateTime = document.DateTime;
             command.WalletId = document.WalletId;
-            command.BucketId = document.CurrencyId;
+            command.BucketId = document.BucketId;
             command.CurrencyId = document.CurrencyId;
             
             return command;

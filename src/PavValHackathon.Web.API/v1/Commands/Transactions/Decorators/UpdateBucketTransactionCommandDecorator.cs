@@ -10,13 +10,14 @@ using PavValHackathon.Web.Data.Repositories;
 
 namespace PavValHackathon.Web.API.v1.Commands.Transactions.Decorators
 {
-    public class UpdateBucketTransactionCommandDecorator : CommandHandlerDecorator<CreateTransactionCommand, int>
+    public class UpdateBucketTransactionCommandDecorator<TCommand, TResult> : CommandHandlerDecorator<TCommand, TResult>
+        where TCommand : TransactionCommand<TResult>
     {
         private readonly IUserContext _userContext;
         private readonly IRepository<Bucket> _bucketRepository;
 
         public UpdateBucketTransactionCommandDecorator(
-            ICommandHandler<CreateTransactionCommand, int> innerHandler,
+            ICommandHandler<TCommand, TResult> innerHandler,
             IUserContext userContext, 
             IRepository<Bucket> bucketRepository) : base(innerHandler)
         {
@@ -24,7 +25,7 @@ namespace PavValHackathon.Web.API.v1.Commands.Transactions.Decorators
             _bucketRepository = bucketRepository ?? throw new ArgumentNullException(nameof(bucketRepository));
         }
 
-        public override async Task<Result<int>> HandleAsync(CreateTransactionCommand command, CancellationToken cancellationToken)
+        public override async Task<Result<TResult>> HandleAsync(TCommand command, CancellationToken cancellationToken)
         {
             var userId = _userContext.UserId;
             var bucket = await _bucketRepository.GetAsync(p => p.Id == command.BucketId && p.UserId == userId, cancellationToken);

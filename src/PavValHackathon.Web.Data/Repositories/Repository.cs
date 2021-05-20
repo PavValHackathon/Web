@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -65,6 +67,40 @@ namespace PavValHackathon.Web.Data.Repositories
 
             await _dbContext.SaveChangesAsync(cancellationToken);
         }
+        
+        public virtual Task DeleteManyAsync(HashSet<int> ids, CancellationToken cancellationToken = default)
+        {
+            Assert.IsNotNull(ids, nameof(ids));
+            cancellationToken.ThrowIfCancellationRequested();
+
+            var listEntityQuery = _dbSet.Where(p => ids.Contains(p.Id));
+            _dbSet.RemoveRange(listEntityQuery);
+            
+            return _dbContext.SaveChangesAsync(cancellationToken);
+        }
+
+        public virtual Task DeleteManyAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default)
+        {
+            // ReSharper disable once PossibleMultipleEnumeration
+            Assert.IsNotNull(entities, nameof(entities));
+            cancellationToken.ThrowIfCancellationRequested();
+            
+            // ReSharper disable once PossibleMultipleEnumeration
+            _dbSet.RemoveRange(entities);
+
+            return _dbContext.SaveChangesAsync(cancellationToken);
+        }
+
+        public virtual Task DeleteManyAsync(Expression<Func<TEntity, bool>> predicateExpression, CancellationToken cancellationToken = default)
+        {
+            Assert.IsNotNull(predicateExpression, nameof(predicateExpression));
+            cancellationToken.ThrowIfCancellationRequested();
+            
+            var listEntityQuery = _dbSet.Where(predicateExpression);
+            _dbSet.RemoveRange(listEntityQuery);
+            
+            return _dbContext.SaveChangesAsync(cancellationToken);
+        }
 
         public virtual async Task<TEntity> UpdateAsync(TEntity entity, CancellationToken cancellationToken = default)
         {
@@ -76,6 +112,18 @@ namespace PavValHackathon.Web.Data.Repositories
             await _dbContext.SaveChangesAsync(cancellationToken);
 
             return entityEntry.Entity;
+        }
+
+        public virtual Task UpdateManyAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default)
+        {
+            // ReSharper disable once PossibleMultipleEnumeration
+            Assert.IsNotNull(entities, nameof(entities));
+            cancellationToken.ThrowIfCancellationRequested();
+            
+            // ReSharper disable once PossibleMultipleEnumeration
+            _dbSet.UpdateRange(entities);
+            
+            return _dbContext.SaveChangesAsync(cancellationToken);
         }
     }
 }

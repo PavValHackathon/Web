@@ -20,22 +20,23 @@ namespace PavValHackathon.Web.Data.Contexts
 
         private static void BuildTransactionType(EntityTypeBuilder<Transaction> entityBuilder)
         {
-            entityBuilder.HasKey(p => p.Id);
+            entityBuilder.HasKey(transaction => transaction.Id);
 
-            entityBuilder.HasOne(p => p.Bucket)
-                .WithMany()
-                .HasForeignKey(p => p.BucketId)
-                .IsRequired();
-            
-            entityBuilder.HasOne(p => p.Wallet)
-                .WithMany()
-                .HasForeignKey(p => p.WalletId)
+            entityBuilder.HasOne(transaction => transaction.Bucket)
+                .WithMany(bucket => bucket.Transactions)
+                .HasForeignKey(transaction => transaction.BucketId)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.NoAction);
             
-            entityBuilder.HasOne(p => p.Currency)
+            entityBuilder.HasOne(transaction => transaction.Wallet)
+                .WithMany(wallet => wallet.Transactions)
+                .HasForeignKey(transaction => transaction.WalletId)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.NoAction);
+            
+            entityBuilder.HasOne(transaction => transaction.Currency)
                 .WithMany()
-                .HasForeignKey(p => p.CurrencyId)
+                .HasForeignKey(transaction => transaction.CurrencyId)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.NoAction);
         }

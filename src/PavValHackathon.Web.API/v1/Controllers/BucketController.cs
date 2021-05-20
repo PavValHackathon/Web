@@ -24,8 +24,8 @@ namespace PavValHackathon.Web.API.v1.Controllers
         private readonly IQueryExecutor _queryExecutor;
         private readonly ICommandExecutor _commandExecutor;
 
-        public BucketController(IMapper mapper, 
-            IQueryExecutor queryExecutor, 
+        public BucketController(IMapper mapper,
+            IQueryExecutor queryExecutor,
             ICommandExecutor commandExecutor)
         {
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
@@ -34,21 +34,22 @@ namespace PavValHackathon.Web.API.v1.Controllers
         }
 
         [HttpGet("{id:int}")]
-        [SwaggerResponse((int)HttpStatusCode.OK, type: typeof(BucketDocument))]
-        [SwaggerResponse((int)HttpStatusCode.NotFound, type: typeof(ProblemDetails))]
+        [SwaggerResponse((int) HttpStatusCode.OK, type: typeof(BucketDocument))]
+        [SwaggerResponse((int) HttpStatusCode.NotFound, type: typeof(ProblemDetails))]
+        [SwaggerResponse((int) HttpStatusCode.BadRequest, type: typeof(ProblemDetails))]
         public async Task<IActionResult> GetAsync(int id)
         {
             if (id <= 0)
                 return BadRequest(Result.Failed((int) HttpStatusCode.BadRequest, "Id can not be less that 1."));
-            
+
             var query = new GetBucketQuery(id);
             var result = await _queryExecutor.ExecuteAsync<GetBucketQuery, BucketDocument>(query);
 
             return Ok(result);
         }
-        
+
         [HttpGet]
-        [SwaggerResponse((int)HttpStatusCode.OK, type: typeof(PaginationCollection<BucketDocument>))]
+        [SwaggerResponse((int) HttpStatusCode.OK, type: typeof(PaginationCollection<BucketDocument>))]
         public async Task<IActionResult> ListAsync(
             [FromQuery] int skip = 0,
             [FromQuery] int top = 100)
@@ -58,8 +59,9 @@ namespace PavValHackathon.Web.API.v1.Controllers
                 Skip = skip,
                 Top = top
             };
-            
-            var result = await _queryExecutor.ExecuteAsync<ListBucketQuery, PaginationCollection<BucketDocument>>(query);
+
+            var result =
+                await _queryExecutor.ExecuteAsync<ListBucketQuery, PaginationCollection<BucketDocument>>(query);
 
             return Ok(result);
         }
@@ -67,6 +69,7 @@ namespace PavValHackathon.Web.API.v1.Controllers
         [HttpPost]
         [SwaggerResponse((int) HttpStatusCode.Created, type: typeof(BucketDocument))]
         [SwaggerResponse((int) HttpStatusCode.NotFound, type: typeof(ProblemDetails))]
+        [SwaggerResponse((int) HttpStatusCode.BadRequest, type: typeof(ProblemDetails))]
         public async Task<IActionResult> CreateAsync([FromBody] CreateBucketRequestDocument document)
         {
             var command = _mapper.MapFrom<CreateBucketRequestDocument, CreateBucketCommand>(document);
@@ -80,19 +83,20 @@ namespace PavValHackathon.Web.API.v1.Controllers
 
             if (queryResult.IsFailed)
                 return BadRequest(queryResult);
-            
+
             // ReSharper disable once Mvc.ActionNotResolved
-            return CreatedAtAction(nameof(GetAsync), new { id = queryResult.Value!.Id }, queryResult);
+            return CreatedAtAction(nameof(GetAsync), new {id = queryResult.Value!.Id}, queryResult);
         }
 
         [HttpDelete("{id:int}")]
-        [SwaggerResponse((int)HttpStatusCode.NoContent)]
-        [SwaggerResponse((int)HttpStatusCode.NotFound, type: typeof(ProblemDetails))]
+        [SwaggerResponse((int) HttpStatusCode.NoContent)]
+        [SwaggerResponse((int) HttpStatusCode.NotFound, type: typeof(ProblemDetails))]
+        [SwaggerResponse((int) HttpStatusCode.BadRequest, type: typeof(ProblemDetails))]
         public async Task<IActionResult> DeleteAsync(int id)
         {
             if (id <= 0)
                 return BadRequest(Result.Failed((int) HttpStatusCode.BadRequest, "Id can not be less that 1."));
-            
+
             var command = new DeleteBucketCommand(id);
             var commandResult = await _commandExecutor.ExecuteAsync<DeleteBucketCommand, Void>(command);
 
@@ -102,13 +106,14 @@ namespace PavValHackathon.Web.API.v1.Controllers
         }
 
         [HttpPatch("{id:int}")]
-        [SwaggerResponse((int)HttpStatusCode.NoContent)]
-        [SwaggerResponse((int)HttpStatusCode.NotFound, type: typeof(ProblemDetails))]
+        [SwaggerResponse((int) HttpStatusCode.NoContent)]
+        [SwaggerResponse((int) HttpStatusCode.NotFound, type: typeof(ProblemDetails))]
+        [SwaggerResponse((int) HttpStatusCode.BadRequest, type: typeof(ProblemDetails))]
         public async Task<IActionResult> UpdateAsync(int id, [FromBody] EditBucketRequestDocument document)
         {
             if (id <= 0)
                 return BadRequest(Result.Failed((int) HttpStatusCode.BadRequest, "Id can not be less that 1."));
-            
+
             var command = new EditBucketCommand(id);
             _mapper.MapFrom(command, document);
 

@@ -11,6 +11,7 @@ namespace PavValHackathon.Web.Data.Repositories.Custom.Impl
         }
 
         protected override IQueryable<Bucket> All => Query
-            .Include(p => p.Currency);
+            .Include(p => p.Currency)
+            .Include(p => p.Transactions);
     }
 }

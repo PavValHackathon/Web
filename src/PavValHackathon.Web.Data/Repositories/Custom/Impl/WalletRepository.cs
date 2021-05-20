@@ -8,14 +8,15 @@ using PavValHackathon.Web.Data.Domain;
 
 namespace PavValHackathon.Web.Data.Repositories.Custom.Impl
 {
-    internal class WalletRepository : Repository<Wallet>, IWalletRepository, IWalletReadOnlyRepository
+    internal class WalletRepository : Repository<Wallet>, IWalletRepository
     {
         public WalletRepository(DbContext dbContext) : base(dbContext)
         {
         }
 
         protected override IQueryable<Wallet> All => Query
-            .Include(wallet => wallet.Currency);
+            .Include(wallet => wallet.Currency)
+            .Include(wallet => wallet.Transactions);
         
         public async Task<bool> ExistAsync(int walletId, int userId, CancellationToken cancellationToken = default)
         {

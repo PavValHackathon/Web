@@ -10,13 +10,14 @@ using PavValHackathon.Web.Data.Repositories.Custom;
 
 namespace PavValHackathon.Web.API.v1.Commands.Transactions.Decorators
 {
-    public class UpdateWalletTransactionCommandDecorator : CommandHandlerDecorator<CreateTransactionCommand, int>
+    public class UpdateWalletTransactionCommandDecorator<TCommand, TResult> : CommandHandlerDecorator<TCommand, TResult>
+        where TCommand : TransactionCommand<TResult>
     {
         private readonly IUserContext _userContext;
         private readonly IWalletRepository _walletRepository;
 
         public UpdateWalletTransactionCommandDecorator(
-            ICommandHandler<CreateTransactionCommand, int> innerHandler,
+            ICommandHandler<TCommand, TResult> innerHandler,
             IUserContext userContext, 
             IWalletRepository walletRepository) : base(innerHandler)
         {
@@ -24,7 +25,7 @@ namespace PavValHackathon.Web.API.v1.Commands.Transactions.Decorators
             _walletRepository = walletRepository ?? throw new ArgumentNullException(nameof(walletRepository));
         }
 
-        public override async Task<Result<int>> HandleAsync(CreateTransactionCommand command, CancellationToken cancellationToken)
+        public override async Task<Result<TResult>> HandleAsync(TCommand command, CancellationToken cancellationToken)
         {
             Wallet? wallet;
             
@@ -35,9 +36,9 @@ namespace PavValHackathon.Web.API.v1.Commands.Transactions.Decorators
             {
                 case 0:
                     return this.BadRequest("User does not have wallet.");
-                case >= 1 when !command.WalletId.HasValue:
+                case > 1 when !command.WalletId.HasValue:
                     return this.BadRequest("User has more than 1 wallet. Please add 'walletId' to the request body.");
-                case >= 1:
+                case > 1:
                     wallet = await _walletRepository.GetAsync(command.WalletId.Value, userId, cancellationToken);
                     break;
                 default:

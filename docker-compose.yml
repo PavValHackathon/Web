@@ -1,0 +1,22 @@
+version: "3.9"
+services:
+    wiremock:
+        image: "rodolpheche/wiremock"
+        ports:
+            - "19257:8080"
+    web:
+        build: .
+        ports:
+            - "4447:4446"
+        environment:
+            - ASPNETCORE_ENVIRONMENT=Staging
+            - ASPNETCORE_URLS=https://+:4447;http://+:4446
+        depends_on:
+            - sql-server
+    sql-server:
+        image: "mcr.microsoft.com/mssql/server"
+        ports:
+            - 1433:1433
+        environment:
+            SA_PASSWORD: "<YourStrong@Passw0rd>"
+            ACCEPT_EULA: "Y"

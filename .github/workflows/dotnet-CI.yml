@@ -7,7 +7,6 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
@@ -19,10 +18,31 @@ jobs:
         dotnet-version: 5.0.x
 
     - name: Restore dependencies
-      run: dotnet restore
+      run: dotnet restore PavValHackathon.Web.sln
 
     - name: Build
-      run: dotnet build --no-restore --configuration Release
+      run: dotnet build PavValHackathon.Web.sln --no-restore --configuration Release
     
     - name: Unit tests
       run: dotnet test PavValHackathon.Web.sln --no-restore --configuration Release
+
+    - name: Setup docker
+      uses: docker-practice/actions-setup-docker@v1
+
+    - name: Publish web app
+      run: dotnet publish src/PavValHackathon.Web.API/PavValHackathon.Web.API.csproj -c Release -o out/
+    
+    - name: Build docker compose
+      run: docker-compose build
+
+    - name: Run docker compose
+      run: docker-compose up -d
+  
+    - name: Wait service to start
+      run: bash build/wait-service-to-run.sh
+
+    - name: Run integration tests
+      run: dotnet test PavValHackathon.Web.IntegrationTests.sln --configuration Release
+
+    - name: Remove docker compose
+      run: docker-compose down

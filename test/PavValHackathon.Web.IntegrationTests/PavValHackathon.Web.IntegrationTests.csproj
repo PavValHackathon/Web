@@ -1,0 +1,39 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+
+        <IsPackable>false</IsPackable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="GodelTech.StoryLine" Version="1.0.0" />
+        <PackageReference Include="GodelTech.StoryLine.Rest" Version="1.0.0" />
+        <PackageReference Include="GodelTech.StoryLine.Utils" Version="0.0.1" />
+        <PackageReference Include="GodelTech.StoryLine.Wiremock" Version="0.0.1" />
+        <PackageReference Include="Microsoft.Extensions.Configuration" Version="5.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="5.0.0" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.1" />
+        <PackageReference Include="xunit" Version="2.4.1" />
+        <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
+        <PackageReference Include="coverlet.collector" Version="1.3.0">
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Include="v1\Buckets\GetAllTests.When_All_Ok_Should_Return_Buckets_Collection.json" />
+      <EmbeddedResource Include="v1\Buckets\GetTests.When_Bucket_Exist_Should_Return_Valid_Report.json" />
+      <None Remove="appsettings.json" />
+      <EmbeddedResource Include="appsettings.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <None Remove="Health\GetTests.When_DataSetExists_ShouldReturnItCorrectly.json" />
+      <EmbeddedResource Include="Health\GetTests.When_All_Ok_Should_Return_Healthy.json" />
+    </ItemGroup>
+
+</Project>

@@ -1,0 +1,15 @@
+{
+  "items": [
+    {
+      "id": 1,
+      "title": "When_All_Ok_Should_Return_Buckets_Collection",
+      "amount": 0.0,
+      "currencyId": 1,
+      "currency": "USD",
+      "pictureId": 1
+    }
+  ],
+  "count": 1,
+  "firstHref": "http://localhost:4447/bucket?skip=0&top=100",
+  "lastHref": "http://localhost:4447/bucket?skip=0&top=100"
+}

@@ -36,6 +36,8 @@ namespace PavValHackathon.Web.Data.Contexts
         private static void BuildCurrencyType(EntityTypeBuilder<Currency> entityBuilder)
         {
             entityBuilder.HasKey(p => p.Id);
+
+            entityBuilder.HasData(new Currency {Id = 1, Name = "USD"});
         }
         
         private static void BuildWalletType(EntityTypeBuilder<Wallet> entityBuilder)

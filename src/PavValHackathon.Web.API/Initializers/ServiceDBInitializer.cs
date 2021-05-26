@@ -27,9 +27,6 @@ namespace PavValHackathon.Web.API.Initializers
 
         public override void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsStaging())
-                return;
-            
             var applicationServices = app.ApplicationServices;
             var serviceScopeFactory = applicationServices.GetService<IServiceScopeFactory>();
             

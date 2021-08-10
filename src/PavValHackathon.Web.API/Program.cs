@@ -14,7 +14,7 @@ namespace PavValHackathon.Web.API
 
         public static IHostBuilder CreateHostBuilder(string[] args)
         {
-            return Microsoft.Extensions.Hosting.Host.CreateDefaultBuilder(args)
+            return Host.CreateDefaultBuilder(args)
                 .UseServiceProviderFactory(new AutofacServiceProviderFactory())
                 .UseSerilog((context, loggerConfiguration) =>
                 {

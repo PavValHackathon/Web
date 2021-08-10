@@ -1,0 +1,12 @@
+{
+  "Duration":"00:00:00.0313572",
+  "Status":"Healthy",
+  "Info": [
+    {
+      "Duration":"00:00:00.0262022",
+      "Key":"SqlServerHealthCheck",
+      "Description":"Ok.",
+      "Status":"Healthy"
+    }
+  ]
+}

@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace PavValHackathon.Web.Data.Domain
 {
     public class Wallet : IDomainEntity
@@ -12,5 +14,7 @@ namespace PavValHackathon.Web.Data.Domain
         
         public int CurrencyId { get; set; }
         public Currency Currency { get; set; } = null!;
+
+        public List<Transaction> Transactions { get; set; } = new();
     }
 }

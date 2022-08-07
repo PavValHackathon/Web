@@ -22,6 +22,11 @@ namespace PavValHackathon.Web.Data
                 .As(typeof(IRepository<>))
                 .InstancePerLifetimeScope();
 
+            builder.RegisterType<TransactionRepository>()
+                .As<IReadOnlyRepository<Transaction>>()
+                .As<IRepository<Transaction>>()
+                .InstancePerLifetimeScope();
+            
             builder.RegisterType<BucketRepository>()
                 .As<IReadOnlyRepository<Bucket>>()
                 .As<IRepository<Bucket>>()

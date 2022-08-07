@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PavValHackathon.Web.Data.Contexts;
 
 namespace PavValHackathon.Web.API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20210518153318_CreateTransaction")]
+    partial class CreateTransaction
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -63,13 +65,6 @@ namespace PavValHackathon.Web.API.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Currency");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "USD"
-                        });
                 });
 
             modelBuilder.Entity("PavValHackathon.Web.Data.Domain.Transaction", b =>

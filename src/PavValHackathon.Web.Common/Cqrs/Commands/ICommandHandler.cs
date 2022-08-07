@@ -1,11 +1,7 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-
-namespace PavValHackathon.Web.Common.Cqrs.Commands
+﻿namespace PavValHackathon.Web.Common.Cqrs.Commands
 {
-    public interface ICommandHandler<in TCommand, TResult>
+    public interface ICommandHandler<in TCommand, TResult> : IRequestHandler<TCommand, TResult>
         where TCommand : class, ICommand<TResult>
     {
-        Task<Result<TResult>> HandleAsync(TCommand command, CancellationToken cancellationToken = default);
     }
 }
